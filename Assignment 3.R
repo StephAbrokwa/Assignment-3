@@ -22,7 +22,7 @@ max_attempts <- 6
 # Initialize the following variables
 correct_letters <- rep("_", word_length) # this line allows the user to visualize the word in this format: " _ _ _ _ "
 wrong_letters <- character(0) # initializes the wrong_letters variable as an empty character vector so that later the incorrectly guessed letters can be added to it using the c() function
-wrong_guesses <- 0 # initializes the wrong_attempts variable beginning at 0 so that later the incorrect number of attempts will be added using "wrong attempts + 1" with a limit at 6 (max amt of attempts)
+wrong_attempts <- 0 # initializes the wrong_attempts variable beginning at 0 so that later the incorrect number of attempts will be added using "wrong attempts + 1" with a limit at 6 (max amt of attempts)
 
 # Function to check if a character is a letter
 is_letter <- function(char) {
@@ -34,8 +34,11 @@ display_progress <- function() {
   print(paste(correct_letters, collapse = " "))
 }
 
+# Store the previous guessed word
+previous_guessed_word <- ""
+
 # Main game loop
-while (wrong_guesses < max_attempts) { # this loop will run as long as the # of wrong attempts is less than 6 
+while (wrong_attempts < max_attempts) { # this loop will run as long as the # of wrong attempts is less than 6 
   # Ask for user input
   user_input <- readline("Please enter a letter or type 'guess' to guess the entire word: ")
   # Convert the input to lowercase to allow the user to input either capital or lowercase letters; only lowercase letters will be displayed 
@@ -45,19 +48,24 @@ while (wrong_guesses < max_attempts) { # this loop will run as long as the # of 
   if (user_input == "guess") {
     guessed_word <- readline("Enter your guess for the whole word: ") 
     
-    if (tolower(guessed_word) == tolower(answer)) { # if the guessed word matches the answer
+    if (tolower(guessed_word) == tolower(answer)) { # if the guessed word is found in the answer
       correct_letters <- strsplit(answer, "")[[1]] # assign the correct letters to the answer
       print(paste("You did it Smarty Pants! You guessed '", answer, "' correctly!"))
       break
     } else { # if the guessed word is incorrect
+      if (tolower(guessed_word) == tolower(previous_guessed_word)) {
+        print("You have already guessed that word. Try again.")
+        next
+      }
       print("Wrong guess! Try again :)")
-      wrong_guesses <- wrong_guesses + 1  # deduct an attempt for wrong word guess
-      print(paste("Remaining tries:", max_attempts - wrong_guesses))
+      wrong_attempts <- wrong_attempts + 1  # deduct an attempt for wrong word attempt; a wrong word attempt only counts as one attempt in this version of Hangman
+      print(paste("Remaining tries:", max_attempts - wrong_attempts))
+      previous_guessed_word <- guessed_word
       next
     }
   } else if (nchar(user_input) != 1 || !is_letter(user_input)) { # this checks if the user input is not a single letter
     print("Please enter a single letter.")
-    next # skip to the next iteration of the loop
+    next # skip to the next part of the loop
   }
   
   # Check if the letter has already been guessed
@@ -67,27 +75,27 @@ while (wrong_guesses < max_attempts) { # this loop will run as long as the # of 
   }
   
   # Check if the letter is in the answer
-  if (grepl(user_input, answer, ignore.case = TRUE)) {
-    print("Correct guess!")
-    indices <- strsplit(answer, "")[[1]] == user_input
-    correct_letters[indices] <- user_input
-    display_progress()
+  if (grepl(user_input, answer, ignore.case = TRUE)) { #
+    print("Correct guess!") 
+    indices <- strsplit(answer, "")[[1]] == user_input # find where the guessed letter is present in the answer
+    correct_letters[indices] <- user_input # update the correct_letters vector with the correctly guessed letter
+    display_progress() # display the progress with the updated correct letters and underscores; the correct letters will replace the underscores in the displayed output 
     
     # Check if the word is fully guessed
     if (all(correct_letters != "_")) {
       print(paste("You did it Smarty Pants! You guessed '", answer, "' correctly!"))
-      break
+      break # exit the main game loop
     }
   } else {
     print("Another one bites the dust! Try again :)")
-    wrong_letters <- c(wrong_letters, user_input)
-    wrong_guesses <- wrong_guesses + 1
-    print(paste("Wrong letters:", paste(wrong_letters, collapse = " ")))
-    print(paste("Remaining attempts:", max_attempts - wrong_guesses))
+    wrong_letters <- c(wrong_letters, user_input) # add the incorrectly guessed letter to the wrong_letters vector
+    wrong_attempts <- wrong_attempts + 1 # add one to the wrong_attempts vector 
+    print(paste("Wrong letters:", paste(wrong_letters, collapse = " "))) # print the list of wrong letters guessed
+    print(paste("Remaining attempts:", max_attempts - wrong_attempts)) # print the number of remaining attempts
   }
 }
 
 # If all tries are exhausted, reveal the secret word
-if (wrong_guesses == max_attempts) {
-  print(paste("Uh oh silly goose! The answer was '", answer, "'. Better luck next time!"))
+if (wrong_attempts == max_attempts) {
+  print(paste("Uh oh silly goose! The answer was '", answer, "'. Better luck next time!")) # print the message revealing the secret word
 }
