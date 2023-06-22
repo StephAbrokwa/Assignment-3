@@ -29,23 +29,9 @@ is_letter <- function(char) {
   grepl("[A-Za-z]", char)
 }
 
-# Function to update the correct letters
-upd_correct_letters <- function(guess) {
-  indices <- strsplit(answer, "")[[1]] == guess
-  correct_letters[indices] <- guess
-}
-
 # Function to display the progress
 display_progress <- function() {
-  for (i in 1:word_length) {
-    upd_correct_letters(correct_letters[i]) # Update correct letters for each position
-    if (correct_letters[i] == "_") {
-      cat("_ ")
-    } else {
-      cat(correct_letters[i])
-    }
-  }
-  cat("\n")
+  cat(paste(correct_letters, collapse = " "), "\n")
 }
 
 # Main game loop
@@ -76,6 +62,8 @@ while (wrong_guesses < max_attempts) {
   # Check if the letter is in the answer
   if (grepl(user_input, answer, ignore.case = TRUE)) {
     cat("Correct guess!\n")
+    indices <- strsplit(answer, "")[[1]] == user_input
+    correct_letters[indices] <- user_input
     display_progress()
     
     # Check if the word is fully guessed
