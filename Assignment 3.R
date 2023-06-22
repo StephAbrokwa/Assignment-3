@@ -14,7 +14,7 @@ answer <- sample(dictionary, 1)
 word_length <- nchar(answer)
 cat("Welcome to Exotic Fruit Hangman!\n")
 cat("The answer has", word_length, "letters.\n")
-cat("You have six guesses to solve this puzzle. All the best!\n")
+cat("You have six attempts to solve this puzzle. All the best!\n")
 
 # Set the maximum number of attempts allowed 
 max_attempts <- 6
@@ -83,7 +83,7 @@ while (wrong_guesses < max_attempts) {
     wrong_letters <- c(wrong_letters, user_input)
     wrong_guesses <- wrong_guesses + 1
     cat("Wrong letters:", paste(wrong_letters, collapse = " "), "\n")
-    cat("Remaining tries:", max_attempts - wrong_guesses, "\n")
+    cat("Remaining attempts:", max_attempts - wrong_guesses, "\n")
   }
 }
 
