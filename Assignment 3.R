@@ -47,6 +47,7 @@ while (wrong_guesses < max_attempts) {
     
     if (tolower(guessed_word) == tolower(answer)) {
       correct_letters <- strsplit(answer, "")[[1]]
+      cat("You did it Smarty Pants! You guessed '", answer, "' correctly!\n")
       break
     } else {
       cat("Wrong guess! Try again :)\n")
