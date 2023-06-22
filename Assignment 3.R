@@ -48,12 +48,10 @@ while (wrong_attempts < max_attempts) { # this loop will run as long as the # of
     if (tolower(guessed_word) == tolower(answer)) { # if the guessed word matches the answer 
       correct_letters <- strsplit(answer, "")[[1]] # assign the correct letters to the answer
       print(paste("You did it Smarty Pants! You guessed '", answer, "' correctly!"))
-      break
     } else { # if the guessed word is incorrect 
       print("Wrong guess! Try again :)")
       wrong_attempts <- wrong_attempts + 1  # deduct an attempt for wrong word guess
-      print(paste("Remaining tries:", max_attempts - wrong_guesses))
-      next # skip to the next iteration of the loop 
+      print(paste("Remaining tries:", max_attempts - wrong_attempts))
     }
   } else if (nchar(user_input) != 1 || !is_letter(user_input)) { # this checks if the user input is not a single letter 
     print("Please enter a single letter.")
