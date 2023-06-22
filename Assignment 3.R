@@ -60,6 +60,12 @@ while (wrong_guesses < max_attempts) {
     next
   }
   
+  # Check if the letter has already been guessed
+  if (user_input %in% c(correct_letters, wrong_letters)) {
+    cat("You have already guessed that letter.\n")
+    next
+  }
+  
   # Check if the letter is in the answer
   if (grepl(user_input, answer, ignore.case = TRUE)) {
     cat("Correct guess!\n")
