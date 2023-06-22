@@ -97,5 +97,5 @@ while (wrong_attempts < max_attempts) { # this loop will run as long as the # of
 
 # If all tries are exhausted, reveal the secret word
 if (wrong_attempts == max_attempts) {
-  print(paste("Uh oh silly goose! The answer was '", answer, "'. Better luck next time!")) # print the message revealing the secret word
+  print(paste("Uh oh silly goose! The answer was '", answer, "'. Better luck next time!")) # reveal the secret word!
 }
