@@ -11,7 +11,7 @@ dictionary <- read_lines(file_path)
 answer <- sample(dictionary, 1)
 
 # Inform the user about the length of the answer and print the beginning messages which list the topic (Exotic Fruits), the word length of the answer (4 - 13 letters), and the # of attempts the user has (6)
-word_length <- nchar(answer)
+word_length <- nchar(answer) 
 print("Welcome to Exotic Fruit Hangman!")
 print(paste("The answer has", word_length, "letters."))
 print("You have six attempts to solve this puzzle. All the best!")
@@ -20,43 +20,44 @@ print("You have six attempts to solve this puzzle. All the best!")
 max_attempts <- 6
 
 # Initialize the following variables
-correct_letters <- rep("_", word_length)
-wrong_letters <- character(0)
-wrong_attempts <- 0
+correct_letters <- rep("_", word_length) # this line allows the user to visualize the word in this format: " _ _ _ _ "
+wrong_letters <- character(0) # initializes the wrong_letters variable as an empty character vector so that later the incorrectly guessed letters can be added to it using the c() function
+wrong_guesses <- 0 # initializes the wrong_attempts variable beginning at 0 so that later the incorrect number of attempts will be added using "wrong attempts + 1" with a limit at 6 (max amt of attempts)
 
 # Function to check if a character is a letter
-is_letter <- function(char) { 
+is_letter <- function(char) {
   grepl("[A-Za-z]", char)
 }
 
-# Function to display the progress
+# Function to display the progress - within the main game loop display_progress will print the current state of the game with filled-in letters and underscores to provide feedback to the user
 display_progress <- function() {
   print(paste(correct_letters, collapse = " "))
 }
 
 # Main game loop
-while (wrong_attempts < max_attempts) {
+while (wrong_guesses < max_attempts) { # this loop will run as long as the # of wrong attempts is less than 6 
   # Ask for user input
   user_input <- readline("Please enter a letter or type 'guess' to guess the entire word: ")
+  # Convert the input to lowercase to allow the user to input either capital or lowercase letters; only lowercase letters will be displayed 
   user_input <- tolower(user_input)
   
   # Check if the input is a single letter or the entire word guess
   if (user_input == "guess") {
-    guessed_word <- readline("Enter your guess for the whole word: ")
+    guessed_word <- readline("Enter your guess for the whole word: ") 
     
-    if (tolower(guessed_word) == tolower(answer)) {
-      correct_letters <- strsplit(answer, "")[[1]]
+    if (tolower(guessed_word) == tolower(answer)) { # if the guessed word matches the answer
+      correct_letters <- strsplit(answer, "")[[1]] # assign the correct letters to the answer
       print(paste("You did it Smarty Pants! You guessed '", answer, "' correctly!"))
       break
-    } else {
+    } else { # if the guessed word is incorrect
       print("Wrong guess! Try again :)")
-      wrong_attempts <- wrong_attempts + 1
-      print(paste("Remaining tries:", max_attempts - wrong_attempts))
+      wrong_guesses <- wrong_guesses + 1  # deduct an attempt for wrong word guess
+      print(paste("Remaining tries:", max_attempts - wrong_guesses))
       next
     }
-  } else if (nchar(user_input) != 1 || !is_letter(user_input)) {
+  } else if (nchar(user_input) != 1 || !is_letter(user_input)) { # this checks if the user input is not a single letter
     print("Please enter a single letter.")
-    next
+    next # skip to the next iteration of the loop
   }
   
   # Check if the letter has already been guessed
@@ -80,13 +81,13 @@ while (wrong_attempts < max_attempts) {
   } else {
     print("Another one bites the dust! Try again :)")
     wrong_letters <- c(wrong_letters, user_input)
-    wrong_attempts <- wrong_attempts + 1
+    wrong_guesses <- wrong_guesses + 1
     print(paste("Wrong letters:", paste(wrong_letters, collapse = " ")))
-    print(paste("Remaining attempts:", max_attempts - wrong_attempts))
+    print(paste("Remaining attempts:", max_attempts - wrong_guesses))
   }
 }
 
 # If all tries are exhausted, reveal the secret word
-if (wrong_attempts == max_attempts) {
+if (wrong_guesses == max_attempts) {
   print(paste("Uh oh silly goose! The answer was '", answer, "'. Better luck next time!"))
 }
