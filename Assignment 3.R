@@ -35,29 +35,29 @@ display_progress <- function() {
 }
 
 # Main game loop
-while (wrong_attempts < max_attempts) {
+while (wrong_attempts < max_attempts) { # this loop will run as long as the # of wrong attempts is less than 6 
   # Ask for user input
   user_input <- readline("Please enter a letter or type 'guess' to guess the entire word: ")
-  # Convert the input to lowercase
+  # Convert the input to lowercase to allow the user to input either capital or lowercase letters; only lowercase letters will be displayed 
   user_input <- tolower(user_input)
   
   # Check if the input is a single letter or the entire word guess
   if (user_input == "guess") {
     guessed_word <- readline("Enter your guess for the whole word: ")
     
-    if (tolower(guessed_word) == tolower(answer)) {
-      correct_letters <- strsplit(answer, "")[[1]]
+    if (tolower(guessed_word) == tolower(answer)) { # if the guessed word matches the answer 
+      correct_letters <- strsplit(answer, "")[[1]] # assign the correct letters to the answer
       print(paste("You did it Smarty Pants! You guessed '", answer, "' correctly!"))
       break
-    } else {
+    } else { # if the guessed word is incorrect 
       print("Wrong guess! Try again :)")
-      wrong_attempts <- wrong_attempts + 1  # Deduct an attempt for wrong word guess
+      wrong_attempts <- wrong_attempts + 1  # deduct an attempt for wrong word guess
       print(paste("Remaining tries:", max_attempts - wrong_guesses))
-      next
+      next # skip to the next iteration of the loop 
     }
-  } else if (nchar(user_input) != 1 || !is_letter(user_input)) {
+  } else if (nchar(user_input) != 1 || !is_letter(user_input)) { # this checks if the user input is not a single letter 
     print("Please enter a single letter.")
-    next
+    next # skip to the next iteration of the loop
   }
   
   # Check if the letter has already been guessed
