@@ -26,7 +26,7 @@ wrong_attempts <- 0 # initializes the wrong_attempts variable beginning at 0 so 
 
 # Function to check if a character is a letter
 is_letter <- function(char) {
-  grepl("^[A-Za-z]+$", char)
+  grepl("^[A-Za-z]+$", char) # ensures that if a user inputs a string of letters and numbers as their guessed_word that it will provide an error 
 }
 
 # Function to display the progress - within the main game loop display_progress will print the current state of the game with filled-in letters and underscores to provide feedback to the user
