@@ -26,7 +26,7 @@ wrong_attempts <- 0 # initializes the wrong_attempts variable beginning at 0 so 
 
 # Function to check if a character is a letter
 is_letter <- function(char) {
-  grepl("[A-Za-z]", char)
+  grepl("^[A-Za-z]+$", char)
 }
 
 # Function to display the progress - within the main game loop display_progress will print the current state of the game with filled-in letters and underscores to provide feedback to the user
@@ -38,8 +38,8 @@ display_progress <- function() {
 previous_guessed_word <- ""
 
 # Main game loop
-incorrect_letters <- character(0) # initialize the incorrect_letters vector as an empty character vector
-incorrect_words <- character(0) # initialize the incorrect_words vector as an empty character vector
+incorrect_letters <- character(0) # initialize the incorrect_letters vector as an empty character vector to erase all previously guessed letters 
+incorrect_words <- character(0) # initialize the incorrect_words vector as an empty character vector to erase all previously guessed wordss
 while (wrong_attempts < max_attempts) { # this loop will run as long as the # of wrong attempts is less than 6 
   # Ask for user input
   user_input <- readline("Please enter a letter or type 'guess' to guess the entire word: ")
@@ -49,6 +49,11 @@ while (wrong_attempts < max_attempts) { # this loop will run as long as the # of
   # Check if the input is a single letter or the entire word guess
   if (user_input == "guess") {
     guessed_word <- readline("Enter your guess for the whole word: ") 
+    
+    if (!is_letter(guessed_word)) { # if the guessed word contains numbers or special characters
+      print("Please enter a word with letters only.")
+      next
+    }
     
     if (tolower(guessed_word) == tolower(answer)) { # if the guessed word is found in the answer
       correct_letters <- strsplit(answer, "")[[1]] # assign the correct letters to the answer
